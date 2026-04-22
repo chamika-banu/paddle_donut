@@ -1,0 +1,34 @@
+# Core ML
+torch>=2.2.2
+torchvision>=0.17.2
+transformers>=4.45.0
+tokenizers>=0.15.2
+
+# HF ecosystem
+accelerate>=0.29.3
+sentencepiece>=0.1.99
+
+# Image processing
+Pillow>=10.3.0
+pillow-heif>=0.16.0
+opencv-python-headless>=4.9.0.80
+
+# Scientific stack
+numpy<2.0.0
+scipy>=1.12.0
+einops>=0.7.0
+timm>=0.9.16
+
+# Utilities
+python-dateutil>=2.9.0
+
+# API layer
+fastapi>=0.111.0
+uvicorn>=0.29.0
+python-multipart>=0.0.9
+httpx>=0.27.0
+
+# PaddleOCR — blocked on 3.x due to confirmed OneDNN CPU crash across all environments.
+# numpy must stay <2.0.0 — paddleocr 2.7.3 compiled against NumPy 1.x ABI.
+paddlepaddle>=2.6.2,<3.0.0
+paddleocr>=2.7.3,<3.0.0

@@ -1,0 +1,19 @@
+# Production overrides for the Donut service.
+# Merges with docker-compose.yml — only the differences are listed here.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up
+#
+# Set DONUT_IMAGE to your registry image before running:
+#   export DONUT_IMAGE=your-registry/donut:latest
+
+services:
+  donut:
+    image: ${DONUT_IMAGE:-donut:latest}
+    environment:
+      - ENABLE_SWAGGER=false
+    command: uvicorn main:app --host 0.0.0.0 --port 8001 --workers 1
+
+volumes:
+  donut_hf_cache:
+  donut_paddle_cache:

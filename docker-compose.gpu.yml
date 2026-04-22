@@ -1,0 +1,30 @@
+# GPU overlay for the Donut service.
+# Merges with docker-compose.yml — overrides the build target and adds GPU device access.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up
+#
+# Or via make:
+#   make serve-gpu
+#
+# Prerequisites on the host:
+#   - NVIDIA GPU drivers installed
+#   - NVIDIA Container Toolkit installed
+#     https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
+services:
+  donut:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  donut_hf_cache:
+  donut_paddle_cache:

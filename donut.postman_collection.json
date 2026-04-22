@@ -1,0 +1,175 @@
+{
+  "info": {
+    "name": "ID Verification Service — Tiered Pipeline (Donut)",
+    "_postman_id": "donut-service-v2",
+    "description": "Postman collection for the ID Verification Service v2.0 (Port 8001).\n\nThis service uses a cost-optimised tiered pipeline:\n- **Tier 1 (fast path):** PaddleOCR + regex + spatial heuristics handles ~70–90% of clean IDs.\n- **Tier 2 (escalation):** Donut (naver-clova-ix/donut-base-finetuned-docvqa, ~500 MB) is only invoked for ambiguous or difficult cases.\n\nRecommended testing order:\n1. GET /health — confirm both models loaded\n2. POST /debug/compare — verify both models work; see what each extracts from your test image\n3. POST /verify/id (clean adult ID) — expect tier1_high, success: true\n4. POST /verify/id (minor's ID) — expect age_below_minimum\n5. POST /verify/id (blurry/ambiguous ID) — expect tier2_* + escalation_reason",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        },
+        "description": "Health check. Returns 200 when both Donut and PaddleOCR models are loaded and ready."
+      },
+      "response": [
+        {
+          "name": "200 OK (CPU)",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"status\": \"ok\",\n  \"model\": \"Donut-base (escalation only)\",\n  \"paddle_model\": \"PaddleOCR-en\",\n  \"device\": \"cpu\"\n}"
+        },
+        {
+          "name": "200 OK (GPU)",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"status\": \"ok\",\n  \"model\": \"Donut-base (escalation only)\",\n  \"paddle_model\": \"PaddleOCR-en\",\n  \"device\": \"cuda\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /debug/compare",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "id_image",
+              "type": "file",
+              "src": "",
+              "description": "(Optional) JPEG / PNG / WEBP image of the ID document",
+              "disabled": true
+            },
+            {
+              "key": "id_image_url",
+              "value": "https://example.com/id.jpg",
+              "type": "text",
+              "description": "(Optional) Direct URL to the ID document image"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/debug/compare",
+          "host": ["{{base_url}}"],
+          "path": ["debug", "compare"]
+        },
+        "description": "Runs PaddleOCR first, then Donut — always both, regardless of what Paddle found.\n\nResponse fields:\n- `dob_paddle`: what PaddleOCR + regex extracted (null if no date pattern found)\n- `dob_donut`: what Donut extracted (null if it couldn't find a DoB)\n- `raw_paddle_text`: full raw OCR text from PaddleOCR — useful for diagnosing regex failures\n\nOnly available when ENABLE_SWAGGER=true (dev mode)."
+      },
+      "response": [
+        {
+          "name": "200 OK — Both models agree",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"dob_paddle\": \"1989-04-12\",\n    \"dob_donut\": \"1989-04-12\",\n    \"raw_paddle_text\": \"JOHN DOE\\nDate of Birth: 12/04/1989\\nNIC: 898742345V\"\n  },\n  \"error\": null\n}"
+        },
+        {
+          "name": "200 OK — Donut found DoB, Paddle did not",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"dob_paddle\": null,\n    \"dob_donut\": \"1989-04-12\",\n    \"raw_paddle_text\": \"J0HN DOE\\n1204198 9\"\n  },\n  \"error\": null\n}"
+        },
+        {
+          "name": "200 OK — Paddle found DoB, Donut did not",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"dob_paddle\": \"1989-04-12\",\n    \"dob_donut\": null,\n    \"raw_paddle_text\": \"JOHN DOE\\nDate of Birth: 12/04/1989\\nNIC: 898742345V\"\n  },\n  \"error\": null\n}"
+        },
+        {
+          "name": "200 OK — Both models disagree",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"dob_paddle\": \"2018-03-15\",\n    \"dob_donut\": \"1989-04-12\",\n    \"raw_paddle_text\": \"JOHN DOE\\nIssue: 15/03/2018\\nDoB: 12/04/1989\"\n  },\n  \"error\": null\n}"
+        }
+      ]
+    },
+    {
+      "name": "POST /verify/id",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "session_id",
+              "value": "{{session_id}}",
+              "type": "text",
+              "description": "UUID — passed through from NestJS for response correlation"
+            },
+            {
+              "key": "id_image",
+              "type": "file",
+              "src": "",
+              "description": "(Optional) JPEG / PNG / WEBP image of the ID document",
+              "disabled": true
+            },
+            {
+              "key": "id_image_url",
+              "value": "https://example.com/id.jpg",
+              "type": "text",
+              "description": "(Optional) Direct URL to the ID document image"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/verify/id",
+          "host": ["{{base_url}}"],
+          "path": ["verify", "id"]
+        },
+        "description": "Production tiered pipeline:\n1. Tier 1 — PaddleOCR + regex (fast, no VLM)\n2. Tier 2 — Donut DocVQA (escalation only)\n3. Age validation — DoB must correspond to age ≥ 18\n\nKey response fields:\n- `confidence_tier`: tier1_high | tier1_low | tier2_confirmed | tier2_independent | tier2_conflict | tier2_failed\n- `tier_used`: which tier resolved the request\n- `escalation_reason`: why Tier 2 was triggered (null if Tier 1 resolved)"
+      },
+      "response": [
+        {
+          "name": "Passed — Tier 1 (keyword-anchored)",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"failure_reason\": null,\n    \"confidence_tier\": \"tier1_high\",\n    \"tier_used\": \"tier1\",\n    \"escalation_reason\": null\n  },\n  \"error\": null\n}"
+        },
+        {
+          "name": "Passed — Tier 2 (Donut independent)",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"failure_reason\": null,\n    \"confidence_tier\": \"tier2_independent\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"no_candidates\"\n  },\n  \"error\": null\n}"
+        },
+        {
+          "name": "Failed — age_below_minimum",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": false,\n  \"data\": {\n    \"is_valid\": false,\n    \"age_verified\": false,\n    \"extracted_dob\": \"2010-03-15\",\n    \"extracted_age\": 15,\n    \"failure_reason\": \"age_below_minimum\",\n    \"confidence_tier\": \"tier1_high\",\n    \"tier_used\": \"tier1\",\n    \"escalation_reason\": null\n  },\n  \"error\": {\n    \"code\": \"age_below_minimum\",\n    \"message\": \"Guardian does not meet the minimum age requirement of 18.\",\n    \"stage\": \"age_validation\"\n  }\n}"
+        },
+        {
+          "name": "Failed — dob_extraction_failed",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": false,\n  \"data\": {\n    \"is_valid\": false,\n    \"age_verified\": false,\n    \"extracted_dob\": null,\n    \"extracted_age\": null,\n    \"failure_reason\": \"dob_extraction_failed\",\n    \"confidence_tier\": \"tier2_failed\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"ocr_text_too_short\"\n  },\n  \"error\": {\n    \"code\": \"dob_extraction_failed\",\n    \"message\": \"No Date of Birth pattern found in the extracted text.\",\n    \"stage\": \"dob_extraction\"\n  }\n}"
+        },
+        {
+          "name": "Passed — Tier 2 conflict (Donut wins)",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"failure_reason\": null,\n    \"confidence_tier\": \"tier2_conflict\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"multiple_unanchored_candidates\"\n  },\n  \"error\": null\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8001",
+      "type": "string"
+    },
+    {
+      "key": "session_id",
+      "value": "test-session-001",
+      "type": "string"
+    }
+  ]
+}

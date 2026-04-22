@@ -1,0 +1,30 @@
+# GPU + Production overlay for the Donut service.
+# Merges on top of docker-compose.yml + docker-compose.prod.yml.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.prod-gpu.yml up
+#
+# Or via make:
+#   make serve-prod-gpu
+#
+# Set DONUT_IMAGE to your GPU registry image before running:
+#   export DONUT_IMAGE=your-registry/donut:gpu-latest
+#
+# Prerequisites on the host:
+#   - NVIDIA GPU drivers installed
+#   - NVIDIA Container Toolkit installed
+
+services:
+  donut:
+    image: ${DONUT_IMAGE:-donut:gpu-latest}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  donut_hf_cache:
+  donut_paddle_cache:

@@ -1,0 +1,22 @@
+services:
+  donut:
+    build:
+      context: .
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENABLE_SWAGGER=true
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
+    volumes:
+      # Donut model weights (~500 MB).
+      # HF_HOME is set to /data/models/huggingface in the Dockerfile.
+      # Persisting this volume avoids a full re-download on every container restart.
+      - donut_hf_cache:/data/models/huggingface
+      # PaddleOCR English model weights (~50 MB).
+      # PaddleOCR always downloads to /root/.paddleocr — no env override available.
+      - donut_paddle_cache:/root/.paddleocr
+
+volumes:
+  donut_hf_cache:
+  donut_paddle_cache:
