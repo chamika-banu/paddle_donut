@@ -132,7 +132,7 @@ curl http://localhost:8001/health
 ```json
 {
 	"status": "ok",
-	"model": "Donut-base (escalation only)",
+	"donut_model": "Donut-base (escalation only)",
 	"paddle_model": "PaddleOCR-en",
 	"device": "cpu"
 }
@@ -143,7 +143,7 @@ curl http://localhost:8001/health
 ```json
 {
 	"status": "ok",
-	"model": "Donut-base (escalation only)",
+	"donut_model": "Donut-base (escalation only)",
 	"paddle_model": "PaddleOCR-en",
 	"device": "cuda"
 }

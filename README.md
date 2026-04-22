@@ -90,7 +90,7 @@ Shows full tier decision metadata including `raw_paddle_text`, `dob_paddle`, and
 ```json
 {
     "status": "ok",
-    "model": "Donut-base (escalation only)",
+    "donut_model": "Donut-base (escalation only)",
     "paddle_model": "PaddleOCR-en",
     "device": "cpu"
 }

@@ -113,7 +113,7 @@ class DonutService:
             image_tensor = self.processor(
                 images=image,             # ← must use keyword arg, not positional
                 return_tensors="pt"
-            ).pixel_values.to(self.device)
+            ).pixel_values.to(self.device).to(self.model.dtype)
 
             # Prepare decoder input (task prompt tokens)
             decoder_input_ids = self.processor.tokenizer(
@@ -149,8 +149,6 @@ class DonutService:
                 generated_ids,
                 skip_special_tokens=False,
             )[0].strip()            
-            
-            print(f"[DonutService] Raw generated text: '{generated_text}'")
 
             # Validate extracted text
             if "<s_answer>" in generated_text:
@@ -159,7 +157,6 @@ class DonutService:
                 generated_text = generated_text.split("</s_answer>")[0]
             
             generated_text = generated_text.strip()            
-            print(f"[DonutService] Parsed answer: '{generated_text}'")
 
             if not generated_text or generated_text.lower() in REFUSAL_ANSWERS:
                 return None

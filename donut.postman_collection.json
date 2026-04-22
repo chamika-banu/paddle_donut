@@ -23,13 +23,13 @@
           "name": "200 OK (CPU)",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"status\": \"ok\",\n  \"model\": \"Donut-base (escalation only)\",\n  \"paddle_model\": \"PaddleOCR-en\",\n  \"device\": \"cpu\"\n}"
+          "body": "{\n  \"status\": \"ok\",\n  \"donut_model\": \"Donut-base (escalation only)\",\n  \"paddle_model\": \"PaddleOCR-en\",\n  \"device\": \"cpu\"\n}"
         },
         {
           "name": "200 OK (GPU)",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"status\": \"ok\",\n  \"model\": \"Donut-base (escalation only)\",\n  \"paddle_model\": \"PaddleOCR-en\",\n  \"device\": \"cuda\"\n}"
+          "body": "{\n  \"status\": \"ok\",\n  \"donut_model\": \"Donut-base (escalation only)\",\n  \"paddle_model\": \"PaddleOCR-en\",\n  \"device\": \"cuda\"\n}"
         }
       ]
     },

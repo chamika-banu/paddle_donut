@@ -1,3 +1,5 @@
+import re
+
 # DoB Extraction Constants and Patterns
 
 # Covers the most common date formats found on government IDs:
@@ -23,6 +25,8 @@ PATTERN_YYYY_MM_DD = re.compile(
     re.IGNORECASE,
 )
 
+# Standard model refusal answers or common "empty" values
+REFUSAL_ANSWERS = {"not found", "none", "n/a", "unknown", ""}
 
 # ESCALATION THRESHOLDS
 # Tier 2 (Donut). Tune these based on real-world accuracy data.

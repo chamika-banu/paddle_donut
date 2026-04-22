@@ -70,7 +70,7 @@ Expected response:
 ```json
 {
     "status": "ok",
-    "model": "Donut-base (escalation only)",
+    "donut_model": "Donut-base (escalation only)",
     "paddle_model": "PaddleOCR-en",
     "device": "cpu"
 }
@@ -109,7 +109,7 @@ Expected response:
 ## Deployment Checklist
 
 - [ ] `ENABLE_SWAGGER=false` is set in production
-- [ ] `/health` returns 200 after startup with `"model": "Donut-base (escalation only)"`
+- [ ] `/health` returns 200 after startup with `"donut_model": "Donut-base (escalation only)"`
 - [ ] NestJS timeout is set to 60s (CPU) or 30s (GPU)
 - [ ] Named volumes (`donut_hf_cache`, `donut_paddle_cache`) are created or already exist
 - [ ] On first startup, internet access is available to download models (~550 MB total)

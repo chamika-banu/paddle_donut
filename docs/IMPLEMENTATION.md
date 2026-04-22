@@ -241,7 +241,7 @@ Returns service readiness and active device.
 ```json
 {
 	"status": "ok",
-	"model": "Donut-base (escalation only)",
+	"donut_model": "Donut-base (escalation only)",
 	"paddle_model": "PaddleOCR-en",
 	"device": "cpu"
 }

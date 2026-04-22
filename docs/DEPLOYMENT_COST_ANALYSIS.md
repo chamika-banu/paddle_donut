@@ -121,7 +121,7 @@ Accommodates model weight caches, Docker image layers, uvicorn logs, and leaves 
 ### GPU
 **Optional but recommended if latency matters.** An NVIDIA T4 (16 GB VRAM) is the minimum GPU tier that can hold Donut comfortably in VRAM with inference headroom. The T4 reduces Donut inference from 4–10s to ~1–2s. PaddleOCR stays on CPU regardless of GPU availability, so total request time on GPU is approximately 1–3s vs 5–12s on CPU.
 
-- [ ] `/health` returns 200 after startup with `"model": "Donut-base (escalation only)"`
+- [ ] `/health` returns 200 after startup with `"donut_model": "Donut-base (escalation only)"`
 - [ ] NestJS timeout is set to 60s (CPU) or 30s (GPU)
 - [ ] Named volumes (`donut_hf_cache`, `donut_paddle_cache`) are created or already exist
 - [ ] On first startup, internet access is available to download models (~550 MB total)
