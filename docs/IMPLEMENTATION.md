@@ -261,7 +261,6 @@ Returns service readiness and active device.
 		"age_verified": true,
 		"extracted_dob": "1989-04-12",
 		"extracted_age": 36,
-		"failure_reason": null,
 		"confidence_tier": "tier1_high",
 		"tier_used": "tier1",
 		"escalation_reason": null
@@ -280,7 +279,6 @@ Returns service readiness and active device.
 		"age_verified": true,
 		"extracted_dob": "1989-04-12",
 		"extracted_age": 36,
-		"failure_reason": null,
 		"confidence_tier": "tier2_confirmed",
 		"tier_used": "tier2",
 		"escalation_reason": "no_candidates"
@@ -336,7 +334,6 @@ class IDVerificationData(BaseModel):
     age_verified: bool
     extracted_dob: str | None
     extracted_age: int | None
-    failure_reason: str | None
     confidence_tier: str | None    # tier1_high | tier1_low | tier2_*
     tier_used: str | None          # "tier1" or "tier2"
     escalation_reason: str | None  # None if Tier 1 resolved

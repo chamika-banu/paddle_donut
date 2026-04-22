@@ -131,31 +131,31 @@
           "name": "Passed — Tier 1 (keyword-anchored)",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"failure_reason\": null,\n    \"confidence_tier\": \"tier1_high\",\n    \"tier_used\": \"tier1\",\n    \"escalation_reason\": null\n  },\n  \"error\": null\n}"
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"confidence_tier\": \"tier1_high\",\n    \"tier_used\": \"tier1\",\n    \"escalation_reason\": null\n  },\n  \"error\": null\n}"
         },
         {
           "name": "Passed — Tier 2 (Donut independent)",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"failure_reason\": null,\n    \"confidence_tier\": \"tier2_independent\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"no_candidates\"\n  },\n  \"error\": null\n}"
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"confidence_tier\": \"tier2_independent\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"no_candidates\"\n  },\n  \"error\": null\n}"
         },
         {
           "name": "Failed — age_below_minimum",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": false,\n  \"data\": {\n    \"is_valid\": false,\n    \"age_verified\": false,\n    \"extracted_dob\": \"2010-03-15\",\n    \"extracted_age\": 15,\n    \"failure_reason\": \"age_below_minimum\",\n    \"confidence_tier\": \"tier1_high\",\n    \"tier_used\": \"tier1\",\n    \"escalation_reason\": null\n  },\n  \"error\": {\n    \"code\": \"age_below_minimum\",\n    \"message\": \"Guardian does not meet the minimum age requirement of 18.\",\n    \"stage\": \"age_validation\"\n  }\n}"
+          "body": "{\n  \"success\": false,\n  \"data\": {\n    \"is_valid\": false,\n    \"age_verified\": false,\n    \"extracted_dob\": \"2010-03-15\",\n    \"extracted_age\": 15,\n    \"confidence_tier\": \"tier1_high\",\n    \"tier_used\": \"tier1\",\n    \"escalation_reason\": null\n  },\n  \"error\": {\n    \"code\": \"age_below_minimum\",\n    \"message\": \"Guardian does not meet the minimum age requirement of 18.\",\n    \"stage\": \"age_validation\"\n  }\n}"
         },
         {
           "name": "Failed — dob_extraction_failed",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": false,\n  \"data\": {\n    \"is_valid\": false,\n    \"age_verified\": false,\n    \"extracted_dob\": null,\n    \"extracted_age\": null,\n    \"failure_reason\": \"dob_extraction_failed\",\n    \"confidence_tier\": \"tier2_failed\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"ocr_text_too_short\"\n  },\n  \"error\": {\n    \"code\": \"dob_extraction_failed\",\n    \"message\": \"No Date of Birth pattern found in the extracted text.\",\n    \"stage\": \"dob_extraction\"\n  }\n}"
+          "body": "{\n  \"success\": false,\n  \"data\": {\n    \"is_valid\": false,\n    \"age_verified\": false,\n    \"extracted_dob\": null,\n    \"extracted_age\": null,\n    \"confidence_tier\": \"tier2_failed\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"ocr_text_too_short\"\n  },\n  \"error\": {\n    \"code\": \"dob_extraction_failed\",\n    \"message\": \"No Date of Birth pattern found in the extracted text.\",\n    \"stage\": \"dob_extraction\"\n  }\n}"
         },
         {
           "name": "Passed — Tier 2 conflict (Donut wins)",
           "status": "OK",
           "code": 200,
-          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"failure_reason\": null,\n    \"confidence_tier\": \"tier2_conflict\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"multiple_unanchored_candidates\"\n  },\n  \"error\": null\n}"
+          "body": "{\n  \"success\": true,\n  \"data\": {\n    \"is_valid\": true,\n    \"age_verified\": true,\n    \"extracted_dob\": \"1989-04-12\",\n    \"extracted_age\": 36,\n    \"confidence_tier\": \"tier2_conflict\",\n    \"tier_used\": \"tier2\",\n    \"escalation_reason\": \"multiple_unanchored_candidates\"\n  },\n  \"error\": null\n}"
         }
       ]
     }

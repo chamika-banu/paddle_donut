@@ -8,7 +8,6 @@ class IDVerificationData(BaseModel):
     age_verified: bool
     extracted_dob: str | None
     extracted_age: int | None
-    failure_reason: str | None
     confidence_tier: str | None
     tier_used: str | None           # "tier1" or "tier2"
     escalation_reason: str | None   # None if Tier 1 resolved; explains why Donut was invoked

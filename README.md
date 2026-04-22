@@ -72,7 +72,6 @@ Request
         "age_verified": true,
         "extracted_dob": "1989-04-12",
         "extracted_age": 36,
-        "failure_reason": null,
         "confidence_tier": "tier1_high",
         "tier_used": "tier1",
         "escalation_reason": null

@@ -161,14 +161,12 @@ async def verify_id(
             age_verified=False,
             extracted_dob=coord_result.dob,
             extracted_age=None,
-            failure_reason=None,
             confidence_tier=coord_result.confidence_tier,
             tier_used=coord_result.tier_used,
             escalation_reason=coord_result.escalation_reason,
         )
 
         if coord_result.dob is None:
-            data.failure_reason = "dob_extraction_failed"
             return IDVerificationResponse(
                 success=False,
                 data=data,
@@ -183,7 +181,6 @@ async def verify_id(
         data.extracted_age = age
 
         if age < 18:
-            data.failure_reason = "age_below_minimum"
             return IDVerificationResponse(
                 success=False,
                 data=data,
