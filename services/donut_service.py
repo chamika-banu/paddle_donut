@@ -36,12 +36,10 @@ class DonutService:
             self.device = "cpu"
             display_device = "CPU"
             print("[DonutService] No GPU available, using CPU")
-
-        print(f"[DonutService] Loading model '{self.MODEL_ID}' on {display_device}...")
-        print("[DonutService] This may take 1-2 minutes on first run (downloading ~500 MB)...")
+        
+        print(f"[DonutService] Downloading/Loading Donut models... (This is ~500MB and only happens on first run if not cached!)")
 
         # Load processor (handles image preprocessing and tokenization)
-        print("[DonutService] Loading processor...")
         self.processor = AutoProcessor.from_pretrained(
             self.MODEL_ID,
             revision=self.MODEL_REVISION,
@@ -49,7 +47,6 @@ class DonutService:
         )
 
         # Load vision-encoder-decoder model
-        print("[DonutService] Loading model (~500 MB)...")
         self.model = VisionEncoderDecoderModel.from_pretrained(
             self.MODEL_ID,
             revision=self.MODEL_REVISION,
@@ -60,9 +57,7 @@ class DonutService:
         # Set to eval mode (disable dropout, batch norm)
         self.model.eval()
 
-        print(f"[DonutService] Model loaded successfully on {self.device}")
-        print(f"[DonutService] Revision: {self.MODEL_REVISION}")
-        print("[DonutService] Model ready.")
+        print("[DonutService] Ready.")
 
     def _load_image(self, image_path: str) -> Image.Image:
         """
