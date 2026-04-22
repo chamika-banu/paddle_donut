@@ -40,6 +40,6 @@ class DebugCompareResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     status: str
-    model: str
+    donut_model: str
     paddle_model: str
     device: str
